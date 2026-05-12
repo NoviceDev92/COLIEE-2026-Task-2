@@ -14,6 +14,16 @@ cases-20260225T043214Z-1-001.zip
 task2_test_files_2026.zip
 hybrid_wrrf.zip
 
+# --- Visualizations and Results ---
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# --- Checkpoint and Cache Files ---
+*checkpoint*.json
+bge_results_checkpoint.json
+
 # --- Unrelated / Reference PDFs ---
 (McGraw-Hill Forouzan*).pdf
 NOWJ paper.pdf

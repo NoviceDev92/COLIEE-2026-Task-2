@@ -113,19 +113,28 @@ This motivated our "decoupling" strategy — stripping all base-case context bef
 ## 📁 Repository Structure
 
 ```
-COLIEE-2026-Task2/
+COLIEE-2026-Task-2/
 ├── 📄 README.md                          # You are here
 ├── 📄 LICENSE                            # MIT License
 ├── 📄 requirements.txt                   # Python dependencies
 ├── 📄 .gitignore                         # Excludes large binaries & private docs
+├── 📄 train.py                           # Standalone training entry point
+├── 📄 evaluate.py                        # Standalone evaluation entry point
+│
+├── 📂 src/                               # Core source modules
+│   ├── model.py                          # PMA Cross-Encoder & [CLS] baseline
+│   ├── retrieval.py                      # wRRF fusion, BM25, context compression
+│   ├── training.py                       # Focal Loss, bucketed negative sampling
+│   ├── inference.py                      # 3-Gate Max-Gap algorithm
+│   └── evaluation.py                     # Micro/macro metric computation
+│
+├── 📂 configs/
+│   └── default.yaml                      # All hyperparameters in one place
 │
 ├── 📂 paper/                             # LaTeX source & figures
 │   ├── main.tex                          # Camera-ready paper (ACM format)
 │   ├── references.bib                    # Bibliography
-│   └── 📂 figures/
-│       ├── archite_diag.pdf              # System architecture diagram
-│       ├── test_pr_curve.png             # Precision-Recall curve
-│       └── attention_heatmap_cleaned.png # PMA attention rollout
+│   └── 📂 figures/                       # All paper figures
 │
 ├── 📂 notebooks/                         # Reproducible experiments
 │   ├── coliee-task2.ipynb                # 🔥 Primary 3-stage pipeline
@@ -165,22 +174,41 @@ The COLIEE dataset requires [official registration](https://coliee.org/). After 
 1. Extract the case files into a `cases/` directory
 2. Update the paths in `notebooks/coliee-task2.ipynb` to point to your local data
 
-### Reproducing Results
+### Training (Standalone Script)
 
-The primary pipeline is contained in a single end-to-end notebook:
+```bash
+# Train the full PMA + Focal Loss pipeline
+python train.py \
+    --config configs/default.yaml \
+    --data_dir /path/to/cases \
+    --labels data/task2_train_labels_2026.json \
+    --seed 42
+
+# Ablation: Train [CLS] baseline without PMA or Focal Loss
+python train.py \
+    --config configs/default.yaml \
+    --data_dir /path/to/cases \
+    --labels data/task2_train_labels_2026.json \
+    --no_pma --no_focal
+```
+
+### Evaluation (Standalone Script)
+
+```bash
+# Run threshold analysis on prediction scores
+python evaluate.py --predictions path/to/predictions.json
+
+# Save results to CSV
+python evaluate.py --predictions path/to/predictions.json --output results/analysis.csv
+```
+
+### End-to-End Notebook
+
+The complete pipeline (retrieval → training → inference → evaluation) is also available as a single notebook:
 
 ```bash
 jupyter notebook notebooks/coliee-task2.ipynb
 ```
-
-The notebook executes sequentially:
-1. **Cell 1–2**: Data loading & preprocessing
-2. **Cell 3**: Context compression & train/val split
-3. **Cell 4**: Stage 1 — wRRF hybrid retrieval (BM25 + BGE-m3)
-4. **Cell 5**: Bucketed negative sampling (6:4:2 Hard:Semi:Easy)
-5. **Cell 6**: Stage 2 — LegalBERT + PMA cross-encoder training
-6. **Cell 7–8**: 3-seed ensemble inference
-7. **Cell 9**: Stage 3 — 3-Gate Max-Gap thresholding & evaluation
 
 > **⏱️ Runtime**: ~2.5 hours end-to-end on a single Tesla T4 GPU
 
@@ -188,6 +216,7 @@ The notebook executes sequentially:
 
 The fine-tuned LegalBERT+PMA checkpoint (~443MB) is not included in this repository due to size constraints. To reproduce:
 - Run the training cells in `coliee-task2.ipynb`, or
+- Use `train.py` with the default config, or
 - Contact the authors for pre-trained weights
 
 ---

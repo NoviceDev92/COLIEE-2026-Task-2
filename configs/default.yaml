@@ -1,0 +1,54 @@
+# ============================================================
+# COLIEE 2026 Task 2 — Default Configuration
+# ============================================================
+# All hyperparameters for the 3-stage Decoupled Architecture.
+# These are the exact values used in the official JUNLLP submission.
+# ============================================================
+
+# --- Stage 1: Retrieval ---
+retrieval:
+  dense_model: "BAAI/bge-m3"
+  max_candidates: 80          # Top-k from wRRF fusion
+  rrf_k: 60                   # RRF smoothing constant
+  w_bge: 1.0                  # Dense retrieval weight
+  w_bm25: 0.2                 # Sparse retrieval weight
+  context_top_k: 2            # Sentences for context compression
+
+# --- Stage 2: Cross-Encoder ---
+model:
+  encoder: "nlpaueb/legal-bert-base-uncased"
+  num_labels: 2
+  pma_heads: 4                # PMA pooling attention heads
+  max_seq_length: 512
+
+training:
+  epochs: 4
+  batch_size: 8
+  gradient_accumulation: 2
+  learning_rate: 2.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  fp16: true
+  seeds: [42, 43, 44]         # 3-seed ensemble
+
+# --- Negative Sampling ---
+negative_sampling:
+  strategy: "bucketed"         # "bucketed" or "standard"
+  hard_count: 6                # Ranks 1-20 (Lexical Traps)
+  semi_hard_count: 4           # Ranks 21-60
+  easy_count: 2                # Ranks 60+
+  total_per_positive: 12       # Used in "standard" mode
+
+# --- Focal Loss ---
+focal_loss:
+  alpha: 0.75
+  gamma: 2.0
+
+# --- Stage 3: 3-Gate Max-Gap ---
+gating:
+  tau_none: 0.10               # Gate 1: Noise filter
+  tau_low: 0.20                # Gate 2: Plateau guard
+  tau_accept: 0.35             # Gate 3: Acceptance threshold
+  gap_min: 0.06                # Gate 3: Minimum probability gap
+  ratio_min: 1.30              # Gate 3: Minimum decay ratio
+  search_depth: 8              # Max candidates to scan for gaps
