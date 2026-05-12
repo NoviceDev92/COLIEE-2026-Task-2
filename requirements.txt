@@ -1,0 +1,30 @@
+# COLIEE 2026 Task 2 — Decoupled Architecture
+# Tested with Python 3.10+ on NVIDIA Tesla T4 (CUDA 12.x)
+
+# Core ML
+torch>=2.1.0
+transformers>=4.36.0
+sentence-transformers>=2.2.0
+datasets>=2.16.0
+
+# Retrieval
+rank-bm25==0.2.2
+sentencepiece>=0.1.99
+
+# Scientific Computing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Notebook Utilities
+tqdm>=4.65.0
+ipywidgets>=8.0.0
+
+# Optional: SLM Ablation (Section 5.2)
+# bitsandbytes>=0.41.0
+# accelerate>=0.24.0

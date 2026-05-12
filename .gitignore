@@ -1,0 +1,68 @@
+# ============================================
+# COLIEE 2026 — .gitignore
+# ============================================
+
+# --- Large Model Weights ---
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+
+# --- Compressed Data Archives ---
+cases-20260225T043214Z-1-001.zip
+task2_test_files_2026.zip
+hybrid_wrrf.zip
+
+# --- Unrelated / Reference PDFs ---
+(McGraw-Hill Forouzan*).pdf
+NOWJ paper.pdf
+
+# --- Draft / Superseded Paper Versions ---
+COLIEE_2026_paper_23.pdf
+COLIEE_Task_2.pdf
+COLIEE_Task_2_final.pdf
+COLIEE_task2.drawio (2).pdf
+archit_diag.pdf
+arch_diag.jpeg
+
+# --- Duplicate / Scratch Notebooks ---
+coliee-task2 (1).ipynb
+coliee-task2-sussy.ipynb
+coliee-task2_grape.ipynb
+
+# --- Private Review Documents ---
+Reviewer Responses.txt
+reviewer_analysis_and_revision_plan.md
+camera_ready_revision_guide.md
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Environment ---
+.env
+.venv/
+env/
+venv/
