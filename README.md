@@ -183,8 +183,8 @@ COLIEE-2026-Task2/
 ### Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/COLIEE-2026-Task2.git
-cd COLIEE-2026-Task2
+git clone https://github.com/NoviceDev92/COLIEE-2026-Task-2.git
+cd COLIEE-2026-Task-2
 pip install -r requirements.txt
 ```
 
