@@ -53,43 +53,13 @@ We propose a **3-stage Decoupled Architecture** that explicitly defends against 
 
 <div align="center">
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    DECOUPLED ARCHITECTURE                           │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  STAGE 1: Enriched Query wRRF Retrieval                            │
-│  ┌──────────────────────────────────────┐                          │
-│  │  BM25 (Sparse) ──┐                  │                          │
-│  │                   ├─► wRRF ─► Top-80 │  Recall Ceiling: 89.2%  │
-│  │  BGE-m3 (Dense) ──┘   Fusion         │                          │
-│  └──────────────────────────────────────┘                          │
-│                         │                                           │
-│                    DECOUPLING                                       │
-│              (Strip all base-case context)                          │
-│                         │                                           │
-│  STAGE 2: Context-Safe PMA Cross-Encoder                           │
-│  ┌──────────────────────────────────────┐                          │
-│  │  LegalBERT + 4-Head PMA Pooling      │                          │
-│  │  Focal Loss (α=0.75, γ=2.0)         │  Precision: 0.6721      │
-│  │  6:4:2 Hard-Negative Curriculum      │                          │
-│  └──────────────────────────────────────┘                          │
-│                         │                                           │
-│  STAGE 3: 3-Gate Safe Max-Gap Algorithm                            │
-│  ┌──────────────────────────────────────┐                          │
-│  │  Gate 1: Noise Filter (p < 0.10)     │                          │
-│  │  Gate 2: Plateau Guard (Δp < 0.03)   │  F1: 0.3942            │
-│  │  Gate 3: Rigorous Acceptance (C_acc)  │                          │
-│  └──────────────────────────────────────┘                          │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
+<img src="paper/figures/architecture_diagram.jpeg" alt="Decoupled Architecture for COLIEE 2026 Task 2" width="95%"/>
+
+*System architecture: Stage 1 (wRRF Retrieval) → Context Decoupling → Stage 2 (PMA Cross-Encoder) → Stage 3 (3-Gate Max-Gap)*
 
 </div>
 
 > **Key Design Philosophy**: Use contextually enriched queries to maximize initial recall, but *aggressively strip that context* before deep semantic classification to preserve structural integrity within the 512-token window.
-
-The full architecture diagram is available in [`paper/figures/archite_diag.pdf`](paper/figures/archite_diag.pdf).
 
 ---
 
